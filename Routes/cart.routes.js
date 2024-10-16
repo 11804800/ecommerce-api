@@ -1,27 +1,36 @@
-const express=require('express');
-const bodyparser=require('body-parser');
+const express = require("express");
+const bodyparser = require("body-parser");
+const {
+  DeleteCartItem,
+  UpdateCartItem,
+  PostCart,
+  GetCart,
+} = require("../Controller/cart.controller");
+const cartModel = require("../Model/cart.model");
 
-const CartRouter=express.Router();
+const CartRouter = express.Router();
+CartRouter.use(bodyparser.json());
 
 //for fetching the cart data
-CartRouter.get("/",(req,res)=>{
-    res.send("Fetch all cart");
-});
+CartRouter.get("/", GetCart);
 
+//middleware for checking that if the product already exists
+async function CartValidation(req, res, next) {
+  const result = await cartModel.findOne({ ProductId: req.body.ProductId });
+  if (result) {
+    res.status(403).json({ message: "Product Already Exists In the Cart" });
+  } else {
+    next();
+  }
+}
 
 //for posting/creating new item to cart
-CartRouter.post("/",(req,res)=>{
-    res.send("Post the new Product")
-});
+CartRouter.post("/", CartValidation, PostCart);
 
-//for updating the cart item 
-CartRouter.put("/:id",(req,res)=>{
-    res.send("Updating the cart prodcuts");
-});
+//for updating the cart item
+CartRouter.put("/:id", UpdateCartItem);
 
 //for Deleting the Cart Item
-CartRouter.delete("/:id",(req,res)=>{
-    res.send("Deleting the cart item")
-});
+CartRouter.delete("/:id", DeleteCartItem);
 
-module.exports=CartRouter;
+module.exports = CartRouter;
