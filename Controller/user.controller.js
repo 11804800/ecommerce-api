@@ -4,7 +4,9 @@ const jwt = require("jsonwebtoken");
 //for registering the user
 async function RegisterUser(req, res) {
   try {
+    //first it will find the user then it check
     const user = await UserSchema.findOne({ username: req.body.username });
+    //if user with the same username already exists then can't create new else it will create
     if (user) {
       res.status(403).json({ message: "User Already Exists" });
     } else {
