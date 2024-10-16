@@ -3,6 +3,7 @@ const express = require("express");
 const ProductRouter = require("./Routes/products.routes");
 const CartRouter=require("./Routes/cart.routes");
 const mongoose = require("mongoose");
+const UserRouter = require("./Routes/user.routes");
 
 //creating the instance of the express
 const app = new express();
@@ -38,6 +39,8 @@ app.use(bodyParser.json());
 app.use("/products", ProductRouter);
 //defining routes for cart
 app.use("/cart",CartRouter);
+//defining routes for user authentication
+app.use('/user',UserRouter);
 
 
 //initialzing the express server

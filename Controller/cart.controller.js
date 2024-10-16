@@ -1,9 +1,9 @@
 const CartSchema = require("../Model/cart.model");
 
-//for getting the cart items
+//for getting the cart items and it will find the cart item where the user will match
 async function GetCart(req, res) {
   try {
-    const result = await CartSchema.find({});
+    const result = await CartSchema.find({User:req.user.user});
     res.status(200).json({ cart: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -13,10 +13,11 @@ async function GetCart(req, res) {
 //for posting the cart item
 async function PostCart(req, res) {
   try {
+    console.log(req.user);
     const result = await CartSchema.create({
       ProductId: req.body.ProductId,
       quantity: req.body.quantity,
-      User: req.body.User,
+      User: req.user.user,
     });
     res.status(201).json(result);
   } catch (error) {

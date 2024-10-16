@@ -1,4 +1,5 @@
 const UserSchema = require("../Model/users.model");
+const jwt=require('jsonwebtoken');
 
 //for registering the user
 async function RegisterUser(req, res) {
@@ -20,15 +21,17 @@ async function UserLogin(req, res) {
   try {
     const user = req.body.username;
     const result = await UserSchema.findOne({ username: user });
+    //if the user is there then it will gettoken
     if (result) {
+      //it will expires after 15minutes
       const token = jwt.sign({ user: user }, "12345-67890-09876-54321", {
-        expiresIn: "1m",
+        expiresIn: "15m",
       });
       res.status(200).json({ message: "Login Successfull", token: token });
     }
-    else
-    {
-        return res.status(404).json({message:"User Not Found"})
+    //else it will return no user found 
+    else {
+      return res.status(404).json({ message: "User Not Found" });
     }
   } catch (err) {
     res.status(500).json({ error: error.message });

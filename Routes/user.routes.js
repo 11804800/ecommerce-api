@@ -1,11 +1,14 @@
 const express=require("express");
 const bodyparser=require('body-parser');
+const { UserLogin, RegisterUser } = require("../Controller/user.controller");
 const UserRouter=express.Router();
 
 UserRouter.use(bodyparser.json());
 
-UserRouter.post("/login",);
+//for login  /user/login
+UserRouter.post("/login",UserLogin);
 
-UserRouter.post("/register",);
+//for registering the user /user/register
+UserRouter.post("/register",RegisterUser);
 
 module.exports=UserRouter;
